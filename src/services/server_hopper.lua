@@ -71,12 +71,16 @@ end
 
 local module = {}
 function module:Teleport(placeId)
+	local gos = 0
 	while task.wait() do
 		pcall(function()
+			print("go " ..  gos)
 			TPReturner(placeId)
+
 			if foundAnything ~= "" then
 				TPReturner(placeId)
 			end
+			gos = gos + 1
 		end)
 	end
 end
