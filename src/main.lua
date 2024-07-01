@@ -5,6 +5,6 @@ while true do
     local TextChatService = game:GetService("TextChatService")
     local generalChannel: TextChannel = TextChatService:WaitForChild("TextChannels").RBXGeneral
     generalChannel:SendAsync(message)
-    module:Teleport(game.placeId)
+    module:Teleport(game.PlaceId)
     wait()
 end
