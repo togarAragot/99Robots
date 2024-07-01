@@ -1,87 +1,52 @@
-local allIds = {}
-local foundAnything = ""
-local actualHour = os.date("!*t").hour
-local deleted = false
+local lastTimeStamp = os.time(os.date("!*t"))
 local teleportService = game:GetService("TeleportService")
 local httpService = game:GetService("HttpService")
+local lastServers = {}
 
-local fileLoaded = pcall(function()
-	allIds = httpService:JSONDecode(readfile("server-hop-temp.json"))
-end)
+local function GetServers(placeid)
+    local Servers = {}
+    if placeid == nil then
+        placeid = game.PlaceId
+    end
 
-if not fileLoaded then
-	table.insert(allIds, actualHour)
-	pcall(function()
-		writefile("server-hop-temp.json", httpService:JSONEncode(allIds))
-	end)
+	local ListRaw = game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/0?sortOrder=2&excludeFullGames=true&limit=100')
+	local CurrentList = httpService:JSONDecode(ListRaw)
 
-end
-
-local function TPReturner(placeId)
-	local site;
-	
-	if foundAnything == "" then
-		site = httpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/0?sortOrder=2&excludeFullGames=true&limit=50'))
-	else
-		site = httpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. placeId .. '/servers/0?sortOrder=2&excludeFullGames=true&limit=50&cursor=' .. foundAnything))
+	if CurrentList.data == nil then
+		game.StarterGui:SetCore("SendNotification", {
+			Title = "ERROR";
+			Text = "Something went wrong with grabbing servers (data doesn't exist)";
+			Icon = "rbxassetid://2541869220";
+			Duration = 7;
+		})
+		return {}
 	end
 
-	local id = ""
-	
-	if site.nextPageCursor and site.nextPageCursor ~= "null" and site.nextPageCursor ~= nil then
-		foundAnything = site.nextPageCursor
-	end
-
-	local num = 0;
-	print(site.data)
-	for i,v in pairs(site.data) do
-		local possible = true
-		id = tostring(v.id)
-		print("loop with id " .. id)
-		for _,existingId in pairs(allIds) do
-			if num ~= 0 then
-				if id == tostring(existingId) then
-					possible = false
-				end
-			else
-				if tonumber(actualHour) ~= tonumber(existingId) then
-					local delFile = pcall(function()
-						delfile("server-hop-temp.json")
-						allIds = {}
-						table.insert(allIds, actualHour)
-					end)
-				end
+	-- Additional check for server having room
+	for i = 1,#CurrentList.data do
+		if CurrentList ~= nil then
+			if CurrentList.data[i].maxPlayers - 1 > CurrentList.data[i].playing then
+				table.insert(Servers, CurrentList.data[i])
 			end
-			num = num + 1
-		end
-		
-		if possible == true then
-			table.insert(allIds, id)
-			task.wait()
-			pcall(function()
-				writefile("server-hop-temp.json", httpService:JSONEncode(allIds))
-				task.wait()
-				print("trying top teleport somewhere")
-				teleportService:TeleportToPlaceInstance(placeId, id, game.Players.LocalPlayer)
-			end)
-			task.wait(4)
 		end
 	end
+
+	wait()
+
+    return Servers
 end
 
 local module = {}
 function module:Teleport(placeId)
-	local gos = 0
-	while task.wait() do
-		pcall(function()
-			print("go " ..  gos)
-			TPReturner(placeId)
+	while wait(5) do
+		if next(lastServers) == nil or os.time(os.date("!*t")) > lastTimeStamp + 3600  then
+			lastServers = GetServers(game.PlaceId)
+		end
+		
+		local nextServer = Servers[math.random(1, #Servers)]	
+		game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, nextServer.id, Players.LocalPlayer)
 
-			if foundAnything ~= "" then
-				TPReturner(placeId)
-			end
-			gos = gos + 1
-		end)
+		table.remove(lastServers, nextServer)
 	end
 end
 return module
