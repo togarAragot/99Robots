@@ -5,10 +5,8 @@ local lastServers = {}
 
 local function GetServers(placeid)
     local Servers = {}
-    if placeid == nil then
-        placeid = game.PlaceId
-    end
 
+	print(placeId)
 	print("pre concat")
 	print(tostring(placeId))
 	local ListRaw = game:HttpGet("https://games.roblox.com/v1/games/" .. tostring(placeId) .. "/servers/0?sortOrder=2&excludeFullGames=true&limit=100")
