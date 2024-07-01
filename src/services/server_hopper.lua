@@ -39,10 +39,13 @@ end
 
 local module = {}
 function module:Teleport(placeId)
+	print("pre loop")
 	while wait(5) do
+		print("pre fetch")
 		if next(lastServers) == nil or os.time(os.date("!*t")) > lastTimeStamp + 3600  then
 			lastServers = GetServers(placeId)
 		end
+		print("post fetch")
 
 		local nextServer = Servers[math.random(1, #Servers)]	
 		teleportService:TeleportToPlaceInstance(placeId, nextServer.id, Players.LocalPlayer)
