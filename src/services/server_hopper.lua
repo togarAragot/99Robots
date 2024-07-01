@@ -9,13 +9,11 @@ local function GetServers(placeId)
 	if placeId == nil then
 		placeId = game.PlaceId
 	end
-	
-	print(tostring(placeId))
-	print("pre concat")
+
 	local ListRaw = game:HttpGet("https://games.roblox.com/v1/games/" .. tostring(placeId) .. "/servers/0?sortOrder=2&excludeFullGames=true&limit=100")
-	print("post concat")
+	print(tostring(ListRaw))
 	local CurrentList = httpService:JSONDecode(ListRaw)
-	print("post json")
+
 	if CurrentList.data == nil then
 		game.StarterGui:SetCore("SendNotification", {
 			Title = "ERROR";
@@ -42,13 +40,11 @@ end
 
 local module = {}
 function module:Teleport(placeId)
-	print("pre loop")
 	while wait(5) do
-		print("pre fetch")
+
 		if next(lastServers) == nil or os.time(os.date("!*t")) > lastTimeStamp + 3600  then
 			lastServers = GetServers(placeId)
 		end
-		print("post fetch")
 
 		local nextServer = Servers[math.random(1, #Servers)]	
 		teleportService:TeleportToPlaceInstance(placeId, nextServer.id, Players.LocalPlayer)
