@@ -33,14 +33,15 @@ local function TPReturner(placeId)
 	end
 
 	local num = 0;
-	
+	print(site.data)
 	for i,v in pairs(site.data) do
 		local possible = true
 		id = tostring(v.id)
+		print("loop with id " .. id)
 		for _,existingId in pairs(allIds) do
 			if num ~= 0 then
 				if id == tostring(existingId) then
-						possible = false
+					possible = false
 				end
 			else
 				if tonumber(actualHour) ~= tonumber(existingId) then
