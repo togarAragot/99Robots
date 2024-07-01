@@ -40,11 +40,11 @@ local module = {}
 function module:Teleport(placeId)
 	while wait(5) do
 		if next(lastServers) == nil or os.time(os.date("!*t")) > lastTimeStamp + 3600  then
-			lastServers = GetServers(game.PlaceId)
+			lastServers = GetServers(placeId)
 		end
-		
+
 		local nextServer = Servers[math.random(1, #Servers)]	
-		game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, nextServer.id, Players.LocalPlayer)
+		teleportService:TeleportToPlaceInstance(placeId, nextServer.id, Players.LocalPlayer)
 
 		table.remove(lastServers, nextServer)
 	end
