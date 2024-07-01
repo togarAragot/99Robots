@@ -11,7 +11,7 @@ local function GetServers(placeid)
 
 	print("pre concat")
 	print(tostring(placeId))
-	local ListRaw = game:HttpGet('https://games.roblox.com/v1/games/' .. tostring(placeId) .. '/servers/0?sortOrder=2&excludeFullGames=true&limit=100')
+	local ListRaw = game:HttpGet("https://games.roblox.com/v1/games/" .. tostring(placeId) .. "/servers/0?sortOrder=2&excludeFullGames=true&limit=100")
 	print("post concat")
 	local CurrentList = httpService:JSONDecode(ListRaw)
 	print("post json")
