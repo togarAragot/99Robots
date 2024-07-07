@@ -42,7 +42,7 @@ local module = {}
 function module:Teleport(placeId)
 	print("method called")
 	while wait(5) do
-
+		print("in loop")
 		if next(lastServers) == nil or os.time(os.date("!*t")) > lastTimeStamp + 3600 then
 			print("getting servers now")
 			lastServers = GetServers(placeId)
