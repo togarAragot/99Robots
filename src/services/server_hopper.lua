@@ -54,4 +54,5 @@ function module:Teleport(placeId)
 		table.remove(lastServers, nextServer)
 	end
 end
+print('test?')
 return module
