@@ -3,7 +3,7 @@ local teleportService = game:GetService("TeleportService")
 local httpService = game:GetService("HttpService")
 local lastServers = {}
 
-function GetServers(placeId)
+local function GetServers(placeId)
     local Servers = {}
 	
 	if placeId == nil then
@@ -41,19 +41,17 @@ end
 local module = {}
 function module:Teleport(placeId)
 	print("method called")
-	while wait(5) do
 		print("in loop")
-		if next(lastServers) == nil or os.time(os.date("!*t")) > lastTimeStamp + 3600 then
-			print("getting servers now")
-			lastServers = GetServers(placeId)
-		end
-
-		local nextServer = Servers[math.random(1, #Servers)]
-		print("teleporting to neextserver ".. tostring(nextServer.id))
-		teleportService:TeleportToPlaceInstance(placeId, nextServer.id, Players.LocalPlayer)
-
-		table.remove(lastServers, nextServer)
+	if next(lastServers) == nil or os.time(os.date("!*t")) > lastTimeStamp + 3600 then
+		print("getting servers now")
+		lastServers = GetServers(placeId)
 	end
+
+	local nextServer = Servers[math.random(1, #Servers)]
+	print("teleporting to neextserver ".. tostring(nextServer.id))
+	teleportService:TeleportToPlaceInstance(placeId, nextServer.id, Players.LocalPlayer)
+
+	table.remove(lastServers, nextServer)
 end
 print('test?')
 return module
