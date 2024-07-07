@@ -46,7 +46,8 @@ function module:Teleport(placeId)
 			lastServers = GetServers(placeId)
 		end
 
-		local nextServer = Servers[math.random(1, #Servers)]	
+		local nextServer = Servers[math.random(1, #Servers)]
+		print("teleporting to neextserver ".. tostring(nextServer.id))
 		teleportService:TeleportToPlaceInstance(placeId, nextServer.id, Players.LocalPlayer)
 
 		table.remove(lastServers, nextServer)
