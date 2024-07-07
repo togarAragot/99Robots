@@ -40,6 +40,7 @@ end
 
 local module = {}
 function module:Teleport(placeId)
+	print("method called")
 	while wait(5) do
 
 		if next(lastServers) == nil or os.time(os.date("!*t")) > lastTimeStamp + 3600  then
