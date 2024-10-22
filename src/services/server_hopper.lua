@@ -6,7 +6,9 @@ local function GetNextServer()
 
     print('pre servers')
     local api = 'http://192.168.178.81:8000/api/99robots/next?occupier=' .. game.Players.LocalPlayer.DisplayName
-    local response = game:HttpGet(api)
+    local responseRaw = game:HttpGet(api)
+	local response = httpService:JSONDecode(responseRaw)
+	print(tostring(response))
     
     -- Uncomment the following block if you want to use PostAsync to get server data.
     -- Ensure that the URL is correct (added http:// as mentioned in earlier discussions).
