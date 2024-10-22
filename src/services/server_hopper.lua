@@ -2,6 +2,22 @@ local lastTimeStamp = os.time(os.date('!*t'))
 local teleportService = game:GetService('TeleportService')
 local httpService = game:GetService('HttpService')
 
+local function dumpTable(t, indent)
+    -- Initialize indent level
+    indent = indent or 0
+    local indentString = string.rep("  ", indent)  -- Two spaces for each indent level
+
+    for key, value in pairs(t) do
+        -- Print the key
+        if type(value) == "table" then
+            print(indentString .. tostring(key) .. ":")
+            dumpTable(value, indent + 1)  -- Recursively print the nested table
+        else
+            print(indentString .. tostring(key) .. ": " .. tostring(value))
+        end
+    end
+end
+
 local function GetNextServer()
 
     print('pre servers')
@@ -14,6 +30,7 @@ local function GetNextServer()
 	-- Check if decoding succeeded
 	if success then
 		print('Decoded response:'.. tostring(response))
+		dumpTable(response)
 	else
 		print('Failed to decode JSON: ' .. tostring(responseRaw))
 	end
@@ -47,7 +64,7 @@ local function GetNextServer()
 
     wait()
 
-    return response.id
+    return response['id']
 end
 
 local module = {}

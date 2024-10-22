@@ -11,7 +11,7 @@ while true do
     local message = messages[math.random(#messages)]
     local TextChatService = game:GetService('TextChatService')
     local generalChannel: TextChannel = TextChatService:WaitForChild('TextChannels').RBXGeneral
-    generalChannel:SendAsync(message)
+    --generalChannel:SendAsync(message)
     module:Teleport(game.PlaceId)
     wait(2)
     
