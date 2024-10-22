@@ -2,15 +2,11 @@ local lastTimeStamp = os.time(os.date('!*t'))
 local teleportService = game:GetService('TeleportService')
 local httpService = game:GetService('HttpService')
 
-local function GetServers(placeId)
-    local Servers = {}
-
-    if placeId == nil then
-        placeId = game.PlaceId  -- Corrected capitalization
-    end
+local function GetNextServer()
 
     print('pre servers')
-    local data = '{ "occupier": '.. game.Players.LocalPlayer.DisplayName ..'}'
+    local api = 'http://192.168.178.81:8000/api/99robots/next?occupier=' .. game.Players.LocalPlayer.DisplayName
+    local response = game:HttpGet(api)
     
     -- Uncomment the following block if you want to use PostAsync to get server data.
     -- Ensure that the URL is correct (added http:// as mentioned in earlier discussions).
@@ -41,15 +37,15 @@ local function GetServers(placeId)
 
     wait()
 
-    return Servers
+    return response.id
 end
 
 local module = {}
 function module:Teleport(placeId)
     print('method called')
 
-    GetServers(game.PlaceId)  -- Corrected capitalization
-
+    local serverId = GetNextServer()  -- Corrected capitalization
+    print(serverId)
     -- Uncomment this when nextServer data is available from GetServers
     -- teleportService:TeleportToPlaceInstance(placeId, nextServer.id, game.Players.LocalPlayer)
 end
