@@ -12,13 +12,11 @@ local function GetNextServer()
 	end)
 	
 	-- Check if decoding succeeded
-	print('was success? ' .. tostring(success))
 	if success then
 		print('Decoded response:'.. tostring(response))
 	else
 		print('Failed to decode JSON: ' .. tostring(responseRaw))
 	end
-	print(tostring(responseRaw))
     
     -- Uncomment the following block if you want to use PostAsync to get server data.
     -- Ensure that the URL is correct (added http:// as mentioned in earlier discussions).
@@ -49,7 +47,7 @@ local function GetNextServer()
 
     wait()
 
-    return responseRaw.id
+    return response.id
 end
 
 local module = {}
