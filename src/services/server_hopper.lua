@@ -12,8 +12,9 @@ local function GetNextServer()
 	end)
 	
 	-- Check if decoding succeeded
+	print('was success? ' .. tostring(success))
 	if success then
-		print('Decoded response:', response)
+		print('Decoded response:'.. tostring(response))
 	else
 		print('Failed to decode JSON: ' .. tostring(responseRaw))
 	end
