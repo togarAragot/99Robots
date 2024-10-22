@@ -48,6 +48,7 @@ function module:Teleport(placeId)
 
     local serverId = GetNextServer()  -- Corrected capitalization
     print(serverId)
+	print('post servers')
     -- Uncomment this when nextServer data is available from GetServers
     -- teleportService:TeleportToPlaceInstance(placeId, nextServer.id, game.Players.LocalPlayer)
 end
