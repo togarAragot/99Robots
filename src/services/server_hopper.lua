@@ -9,12 +9,15 @@ local function GetServers(placeId)
 	if placeId == nil then
 		placeId = game.PlaceId
 	end
-	print("pre servers")
-	local ListRaw = game:HttpGet("https://games.roblox.com/v1/games/" .. tostring(placeId) .. "/servers/0?sortOrder=2&excludeFullGames=true&limit=100")
-	print("raw list" .. tostring(ListRaw))
-	local CurrentList = httpService:JSONDecode(ListRaw)
 
-	if CurrentList.data == nil then
+	print("pre servers")
+	local data = '{ "occupier": '.. game.Players.LocalPlayer.DisplayName ..'}'
+	local response = httpService::PostAsync("127.0.0.1:8000/api/99robots/next", data, Enum.HttpContentType.ApplicationJson, false)
+	print("raw list" .. tostring(response))
+	local nextServerData = httpService:JSONDecode(response)
+
+	print("serverData" .. tostring(nextServerData))
+	if nextServerData == nil then
 		game.StarterGui:SetCore("SendNotification", {
 			Title = "ERROR";
 			Text = "Something went wrong with grabbing servers (data doesn't exist)";
@@ -25,13 +28,13 @@ local function GetServers(placeId)
 	end
 
 	-- Additional check for server having room
-	for i = 1,#CurrentList.data do
-		if CurrentList ~= nil then
-			if CurrentList.data[i].maxPlayers - 1 > CurrentList.data[i].playing then
-				table.insert(Servers, CurrentList.data[i])
-			end
-		end
-	end
+	--for i = 1,#CurrentList.data do
+	--	if CurrentList ~= nil then
+	--		if CurrentList.data[i].maxPlayers - 1 > CurrentList.data[i].playing then
+	--			table.insert(Servers, CurrentList.data[i])
+	--		end
+	--	end
+	--end
 
 	wait()
 
@@ -41,16 +44,12 @@ end
 local module = {}
 function module:Teleport(placeId)
 	print("method called")
-	if next(lastServers) == nil or os.time(os.date("!*t")) > lastTimeStamp + 3600 then
-		print("getting servers now")
-		lastServers = GetServers(placeId)
-	end
 
-	local nextServer = Servers[math.random(1, #Servers)]
-	print("teleporting to neextserver ".. tostring(nextServer.id))
-	teleportService:TeleportToPlaceInstance(placeId, nextServer.id, Players.LocalPlayer)
 
-	table.remove(lastServers, nextServer)
+	GetServers(game.placeId)
+
+	--teleportService:TeleportToPlaceInstance(placeId, nextServer.id, game.Players.LocalPlayer)
+
+
 end
-print('test?')
 return module
