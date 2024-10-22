@@ -30,7 +30,8 @@ local function GetNextServer()
 	-- Check if decoding succeeded
 	if success then
 		print('Decoded response:'.. tostring(response))
-		dumpTable(response)
+		print('this is the id with string' .. tostring(response.id))
+		print('this is the id without string' .. response.id)
 	else
 		print('Failed to decode JSON: ' .. tostring(responseRaw))
 	end
@@ -64,7 +65,7 @@ local function GetNextServer()
 
     wait()
 
-    return response['id']
+    return response.id
 end
 
 local module = {}
